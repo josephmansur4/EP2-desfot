@@ -1,0 +1,18 @@
+import random
+
+class Ship:
+    def __init__(self, name, size):
+        self.name = name
+        self.size = size
+        self.coordinates = []
+
+    def is_sunk(self):
+        return all(coord[2] for coord in self.coordinates)
+
+class Board:
+    def __init__(self):
+        self.size = 10
+        self.grid = [["~" for _ in range(self.size)] for _ in range(self.size)]
+        self.ships = []
+
+    def 
