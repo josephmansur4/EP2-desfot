@@ -101,10 +101,10 @@ if mapa_computador[linha][coluna] == 'N':
                 print("O computador atirou na água.")
             turno_humano = True
  if foi_derrotado(mapa_humano):
-            print("Todos os seus navios foram afundados. Você perdeu!")
+            print("Perdedor!")
             break
         elif foi_derrotado(mapa_computador):
-            print("Você afundou todos os navios do computador. Parabéns, você venceu!")
+            print("Vencendor!")
             break
 
 # Iniciar o jogo
