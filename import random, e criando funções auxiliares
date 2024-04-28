@@ -1,0 +1,11 @@
+import random
+
+# Funções auxiliares
+def cria_mapa(tamanho):
+    return [[' ' for _ in range(tamanho)] for _ in range(tamanho)]
+
+def posicao_suporta(mapa, tamanho_navio, linha, coluna, orientacao):
+    n = len(mapa)
+    if orientacao == 'v':
+        if linha + tamanho_navio > n:
+            return False
