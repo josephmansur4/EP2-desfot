@@ -64,3 +64,22 @@ def aloca_navios_humano(mapa, tamanhos_navios):
                 break
             else:
                 print("Posição inválida ou ocupada, tente novamente.")
+def jogo_batalha_naval():
+    tamanho_mapa = 10
+    tamanhos_navios = [5, 4, 3, 3, 2]  # Tamanhos clássicos dos navios
+    mapa_humano = cria_mapa(tamanho_mapa)
+    mapa_computador = cria_mapa(tamanho_mapa)
+    mapa_computador_oculto = cria_mapa(tamanho_mapa)
+
+    aloca_navios_humano(mapa_humano, tamanhos_navios)
+    aloca_navios(mapa_computador, tamanhos_navios)
+
+    turno_humano = random.choice([True, False])
+
+    while not (foi_derrotado(mapa_humano) or foi_derrotado(mapa_computador)):
+        if turno_humano:
+            print("Sua vez de atacar:")
+            print_mapa(mapa_computador_oculto)
+            linha = int(input("Escolha a linha (1 a 10): ")) - 1
+            coluna = input("Escolha a coluna (A a J): ").upper()
+            coluna = 'ABCDEFGHIJ'.index(coluna)
