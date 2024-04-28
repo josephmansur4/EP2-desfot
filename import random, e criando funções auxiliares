@@ -28,3 +28,12 @@ linha = random.randint(0, len(mapa) -1)
             orientacao = random.choice(['h', 'v'])
             if posicao_suporta(mapa, tamanho, linha, coluna, orientacao):
                 if orientacao == 'v':
+for i in range(tamanho):
+                        mapa[linha + i][coluna] = 'N'
+                else:
+                    for i in range(tamanho):
+                        mapa[linha][coluna + i] = 'N'
+                break
+
+def foi_derrotado(matriz):
+    return all('N' not in linha for linha in matriz)
