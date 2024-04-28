@@ -37,3 +37,30 @@ for i in range(tamanho):
 
 def foi_derrotado(matriz):
     return all('N' not in linha for linha in matriz)
+def print_mapa(mapa):
+    colunas = 'ABCDEFGHIJ'[:len(mapa)]
+    print("  " + " ".join(colunas))
+    for i in range(len(mapa)):
+        linha = mapa[i]
+        linha_str = " ".join(linha)
+        print(f"{i+1:2} {linha_str}")
+def aloca_navios_humano(mapa, tamanhos_navios):
+    print("Por favor, aloque seus navios no mapa:")
+    print_mapa(mapa)
+    for tamanho in tamanhos_navios:
+        while True:
+            print(f"Navio de tamanho {tamanho}:")
+            linha = int(input("Linha (1 a {}): ".format(len(mapa)))) - 1
+            coluna = input("Coluna (A a J): ").upper()
+            coluna = 'ABCDEFGHIJ'.index(coluna)
+            orientacao = input("Orientação (vertical 'v' ou horizontal 'h'): ")
+            if posicao_suporta(mapa, tamanho, linha, coluna, orientacao):
+                for i in range(tamanho):
+                    if orientacao == 'v':
+                        mapa[linha + i][coluna] = 'N'
+                    else:
+                        mapa[linha][coluna + i] = 'N'
+                print_mapa(mapa)
+                break
+            else:
+                print("Posição inválida ou ocupada, tente novamente.")
