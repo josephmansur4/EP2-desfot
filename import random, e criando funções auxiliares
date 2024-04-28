@@ -9,3 +9,17 @@ def posicao_suporta(mapa, tamanho_navio, linha, coluna, orientacao):
     if orientacao == 'v':
         if linha + tamanho_navio > n:
             return False
+for i in range(tamanho_navio):
+            if mapa[linha + i][coluna] != ' ':
+                return False
+    elif orientacao == 'h':
+        if coluna + tamanho_navio > n:
+            return False
+        for i in range(tamanho_navio):
+            if mapa[linha][coluna + i] != ' ':
+                return False
+    return True
+
+def aloca_navios(mapa, tamanhos_navios):
+    for tamanho in tamanhos_navios:
+        while True:
