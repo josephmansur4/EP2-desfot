@@ -23,8 +23,8 @@ for i in range(tamanho_navio):
 def aloca_navios(mapa, tamanhos_navios):
     for tamanho in tamanhos_navios:
         while True:
-linha = random.randint(0, len(mapa))
-            coluna = random.randint(0, len(mapa))
+linha = random.randint(0, len(mapa) -1)
+            coluna = random.randint(0, len(mapa) -1)
             orientacao = random.choice(['h', 'v'])
             if posicao_suporta(mapa, tamanho, linha, coluna, orientacao):
                 if orientacao == 'v':
