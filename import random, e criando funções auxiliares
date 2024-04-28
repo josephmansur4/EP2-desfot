@@ -83,3 +83,20 @@ def jogo_batalha_naval():
             linha = int(input("Escolha a linha (1 a 10): ")) - 1
             coluna = input("Escolha a coluna (A a J): ").upper()
             coluna = 'ABCDEFGHIJ'.index(coluna)
+if mapa_computador[linha][coluna] == 'N':
+                print("Você acertou um navio!")
+                mapa_computador_oculto[linha][coluna] = 'X'
+            else:
+                print("água.")
+                mapa_computador_oculto[linha][coluna] = 'A'
+            turno_humano = False
+        else:
+            print("Vez do computador atacar.")
+            linha, coluna = random.randint(0, tamanho_mapa - 1), random.randint(0, tamanho_mapa - 1)
+
+            if mapa_humano[linha][coluna] == 'N':
+                print("O computador acertou um dos seus navios!")
+                mapa_humano[linha][coluna] = 'X'
+            else:
+                print("O computador atirou na água.")
+            turno_humano = True
