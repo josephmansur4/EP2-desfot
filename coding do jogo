@@ -52,6 +52,12 @@ ALFABETO = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 def cria_mapa(tamanho):
     return [[' ' for _ in range(tamanho)] for _ in range(tamanho)]
 
+import random
+
+# Funções auxiliares
+def cria_mapa(tamanho):
+    return [[' ' for _ in range(tamanho)] for _ in range(tamanho)]
+
 def posicao_suporta(mapa, tamanho_navio, linha, coluna, orientacao):
     n = len(mapa)
     if orientacao == 'v':
@@ -68,20 +74,6 @@ def posicao_suporta(mapa, tamanho_navio, linha, coluna, orientacao):
                 return False
     return True
 
-def escolhe_nacao():
-    print("Escolha uma nação:")
-    for pais in PAISES.keys():
-        print(pais)
-    pais_escolhido = input("Digite o nome da nação: ")
-    return PAISES[pais_escolhido]
-
-def gera_tamanhos_navios(nacao):
-    tamanhos_navios = []
-    for tipo_navio, quantidade in nacao.items():
-        for _ in range(quantidade):
-            tamanhos_navios.append(CONFIGURACAO[tipo_navio])
-    return tamanhos_navios
-
 def aloca_navios(mapa, tamanhos_navios):
     for tamanho in tamanhos_navios:
         while True:
@@ -89,45 +81,41 @@ def aloca_navios(mapa, tamanhos_navios):
             coluna = random.randint(0, len(mapa) - 1)
             orientacao = random.choice(['h', 'v'])
             if posicao_suporta(mapa, tamanho, linha, coluna, orientacao):
-                for i in range(tamanho):
-                    if orientacao == 'v':
+                if orientacao == 'v':
+                    for i in range(tamanho):
                         mapa[linha + i][coluna] = 'N'
-                    else:
-                        for i in range(tamanho):
-                            mapa[linha][coluna + i] = 'N'
+                else:
+                    for i in range(tamanho):
+                        mapa[linha][coluna + i] = 'N'
                 break
 
-def foi_derrotado(mapa):
-    for linha in mapa:
-        if 'N' in linha:
-            return False
-    return True
+def foi_derrotado(matriz):
+    return all('N' not in linha for linha in matriz)
 
 def print_mapa(mapa):
-    colunas = ALFABETO[:len(mapa)]
+    colunas = 'ABCDEFGHIJ'[:len(mapa)]
     print("  " + " ".join(colunas))
-    linha_numero = 1
-    for linha in mapa:
-        print(str(linha_numero).rjust(2) + " " + " ".join(linha))
-        linha_numero += 1
+    for i in range(len(mapa)):
+        linha = mapa[i]
+        linha_str = " ".join(linha)
+        print(f"{i+1:2} {linha_str}")
 
 def aloca_navios_humano(mapa, tamanhos_navios):
     print("Por favor, aloque seus navios no mapa:")
     print_mapa(mapa)
     for tamanho in tamanhos_navios:
         while True:
-            print("Navio de tamanho " + str(tamanho) + ":")
-            linha = int(input("Linha (1 a " + str(len(mapa)) + "): ")) - 1
+            print(f"Navio de tamanho {tamanho}:")
+            linha = int(input("Linha (1 a {}): ".format(len(mapa)))) - 1
             coluna = input("Coluna (A a J): ").upper()
-            coluna = ALFABETO.find(coluna)
+            coluna = 'ABCDEFGHIJ'.index(coluna)
             orientacao = input("Orientação (vertical 'v' ou horizontal 'h'): ")
             if posicao_suporta(mapa, tamanho, linha, coluna, orientacao):
                 for i in range(tamanho):
                     if orientacao == 'v':
                         mapa[linha + i][coluna] = 'N'
                     else:
-                        for i in range(tamanho):
-                            mapa[linha][coluna + i] = 'N'
+                        mapa[linha][coluna + i] = 'N'
                 print_mapa(mapa)
                 break
             else:
@@ -135,8 +123,7 @@ def aloca_navios_humano(mapa, tamanhos_navios):
 
 def jogo_batalha_naval():
     tamanho_mapa = 10
-    nacao = escolhe_nacao()
-    tamanhos_navios = gera_tamanhos_navios(nacao)
+    tamanhos_navios = [5, 4, 3, 3, 2]  # Tamanhos clássicos dos navios
     mapa_humano = cria_mapa(tamanho_mapa)
     mapa_computador = cria_mapa(tamanho_mapa)
     mapa_computador_oculto = cria_mapa(tamanho_mapa)
@@ -145,13 +132,14 @@ def jogo_batalha_naval():
     aloca_navios(mapa_computador, tamanhos_navios)
 
     turno_humano = random.choice([True, False])
+
     while not (foi_derrotado(mapa_humano) or foi_derrotado(mapa_computador)):
         if turno_humano:
             print("Sua vez de atacar:")
             print_mapa(mapa_computador_oculto)
             linha = int(input("Escolha a linha (1 a 10): ")) - 1
             coluna = input("Escolha a coluna (A a J): ").upper()
-            coluna = ALFABETO.find(coluna)
+            coluna = 'ABCDEFGHIJ'.index(coluna)
             if mapa_computador[linha][coluna] == 'N':
                 print("Você acertou um navio!")
                 mapa_computador_oculto[linha][coluna] = 'X'
@@ -161,8 +149,7 @@ def jogo_batalha_naval():
             turno_humano = False
         else:
             print("Vez do computador atacar.")
-            linha = random.randint(0, tamanho_mapa - 1)
-            coluna = random.randint(0, tamanho_mapa - 1)
+            linha, coluna = random.randint(0, tamanho_mapa - 1), random.randint(0, tamanho_mapa - 1)
             if mapa_humano[linha][coluna] == 'N':
                 print("O computador acertou um dos seus navios!")
                 mapa_humano[linha][coluna] = 'X'
@@ -171,10 +158,10 @@ def jogo_batalha_naval():
             turno_humano = True
 
         if foi_derrotado(mapa_humano):
-            print("Você perdeu!")
+            print("Perdedor!")
             break
         elif foi_derrotado(mapa_computador):
-            print("Você venceu!")
+            print("Vencedor!")
             break
 
 # Iniciar o jogo
